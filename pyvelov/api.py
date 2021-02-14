@@ -12,24 +12,68 @@ https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?maxf
 
 from urllib.request import urlretrieve
 import json
+import os
+
+URL_API = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?maxfeatures=-1&start=1'
 
 class APIConnection:
     """
     Class represents a connection with API and retrieve datas from JSON file.
+
+    Attributes
+    -----------
+    - `datas`(tuple):Tuple of dictionnaries
     """
 
-    URL_API = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?maxfeatures=-1&start=1'
-
     def __init__(self):
-        try:
-            #Connection with API
-            request = urlretrieve(self.URL_API)
-            json_file = request[0]
-            
-            datas = json.loads(json_file)
+        """Constructor.
+        Connection with API, retrieve JSON file and parse it.
 
-            print(datas)
+        Returns
+        -------
+            `None`
+        """
+        self.datas = None
+        self.nbStations = 0
+
+        #Connection with API
+        try:
+            request = urlretrieve(URL_API)
+        except:
+            return None
+        
+
+        temp_file_path = request[0]
+        #Open file downloaded read and close
+        try:
+            json_file = open(temp_file_path,'r')
+            json_datas = json_file.read()
+            json_file.close()
+        except:
+            return None
+
+        #Delete temp file
+        try:
+            if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
         except:
             pass
+        
+        #JSON load
+        try:
+            datas = json.loads(json_datas)
+        except:
+            return None
+        
+        self.datas = tuple(datas['values'])
+        self.nbStations = len(self.datas)
+        return None
+
+    def getDatas(self):
+        return self.datas
+
+
+def createAPIInstance():
+    connection = APIConnection()
 
 pass
