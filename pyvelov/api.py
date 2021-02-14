@@ -16,6 +16,7 @@ import os
 
 URL_API = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?maxfeatures=-1&start=1'
 
+
 class APIConnection:
     """
     Class represents a connection with API and retrieve datas from JSON file.
@@ -36,44 +37,83 @@ class APIConnection:
         self.datas = None
         self.nbStations = 0
 
-        #Connection with API
+        # Connection with API
         try:
             request = urlretrieve(URL_API)
         except:
             return None
-        
 
         temp_file_path = request[0]
-        #Open file downloaded read and close
+        # Open file downloaded read and close
         try:
-            json_file = open(temp_file_path,'r')
+            json_file = open(temp_file_path, 'r')
             json_datas = json_file.read()
             json_file.close()
         except:
             return None
 
-        #Delete temp file
+        # Delete temp file
         try:
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
         except:
             pass
-        
-        #JSON load
+
+        # JSON load
         try:
             datas = json.loads(json_datas)
         except:
             return None
-        
+
         self.datas = tuple(datas['values'])
         self.nbStations = len(self.datas)
         return None
 
     def getDatas(self):
+        """Getter datas
+
+        Returns:
+        --------
+            (tuple): Tuple of dictionnaries
+            (None): Return a None if error during API connection
+        """
         return self.datas
 
 
+class VelovAPIError(Exception):
+    """Exception `APIError` based on basic `Exception` class.
+    Raised if error during instanciation of `APIConnection`class.
+
+    Parent:
+    -------
+        Exception (): Basic built-in Exception class
+    """
+
+    def __init__(self):
+        super().__init__(
+            "Error during API connection. Check Internet connection, firewall, and others")
+
+
 def createAPIInstance():
+    """Public function called in order to instanciate an `APIConnection`.
+    If a problem occured during `APIConnection` construction, attribute `datas` is None.
+    Function `createAPIInstance()`raises a `VelovAPIError`if `connection.getDatas()` is None.
+
+    Raises:
+    -------
+        VelovAPIError: If `APIConnection().getDatas()` is None
+
+    Returns:
+    --------
+        datas(tuple): Raw datas
+    """
     connection = APIConnection()
+    datas = connection.getDatas()
+
+    if datas is None:
+        raise VelovAPIError
+
+    return datas
+
 
 pass
