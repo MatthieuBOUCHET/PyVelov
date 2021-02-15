@@ -1,4 +1,5 @@
 import api
+from json import dumps
 from datetime import datetime
 
 RAW_DATAS = api.createAPIInstance()
@@ -38,7 +39,7 @@ class VelovStation:
         self.status = self.statusConvert(dictData['status'])
         self.availability = dictData['availabilitycode']
         self.banking = dictData['banking']
-        self.updateDateTime = self.dateTimeConvert(dictData['last_update'])
+        self.updateDateTime = dictData['last_update']
         self.insee = self.stringToInt(dictData['code_insee'])
 
         return None
@@ -73,32 +74,6 @@ class VelovStation:
             except:
                 return parameter
         return parameter
-
-    def dateTimeConvert(self, strDateTime) -> object:
-        """Method convert a string to datetime object
-
-        Args:
-            strDateTime (string OR None): String of datetime released from API datas.
-            (%Y-%m-%d %X)
-
-        Returns:
-            (datetime object): Return a date time object
-            (None): If argument `strDateTime` is None
-        """
-        if strDateTime is None:
-            return None
-
-        DateTimeSplit = strDateTime.split(" ")
-        date = DateTimeSplit[0]
-        time = DateTimeSplit[1]
-
-        dateSplited = date.split('-')
-        timeSplited = time.split(':')
-
-        dateSplited = [int(element) for element in dateSplited]
-        timeSplited = [int(element) for element in timeSplited]
-
-        return datetime(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1], timeSplited[2])
 
     def availabilityStandsPercentageCalculator(self) -> float:
         """Calculate percentage of Stands available
@@ -136,6 +111,34 @@ class VelovStation:
             return None
 
     ## PUBLIC METHODS ##
+    def dateTimeExport(self) -> object:
+        """Method convert a attribute `updateDateTime`(string) to datetime object
 
+        Args:
+            self.strDateTime (string OR None): String of datetime released from API datas.
+            (%Y-%m-%d %X)
+
+        Returns:
+            (datetime object): Return a date time object
+            (None): If argument `strDateTime` is None
+        """
+        if self.updateDateTime is None:
+            return None
+
+        DateTimeSplit = self.updateDateTime.split(" ")
+        date = DateTimeSplit[0]
+        time = DateTimeSplit[1]
+
+        dateSplited = date.split('-')
+        timeSplited = time.split(':')
+
+        dateSplited = [int(element) for element in dateSplited]
+        timeSplited = [int(element) for element in timeSplited]
+
+        return datetime(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1], timeSplited[2])
+
+    def exportJSON(self):
+        datas = self.getAll()
+        return dumps(datas)
 
 pass
