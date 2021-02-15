@@ -1,3 +1,12 @@
+"""
+File from module `pyvelov`. Contains all features required to manipulate stations and operate on stations.
+
+Author: Matthieu BOUCHET
+Author email: matthieu.bouchet@outlook.com
+Author website: https://www.matthieubouchet.fr
+GitHub project: https://github.com/MatthieuBOUCHET/PyVelov
+"""
+
 import api
 from os import remove
 from json import dumps
@@ -159,23 +168,23 @@ class VelovStation:
         uid = self.getAttribute("uid")
         fileName = "VELOVStation_{0}.json".format(uid)
 
-        #CREATE JSONDATAS
+        # CREATE JSONDATAS
         try:
             jsonDatas = self.exportJSON()
         except:
             return False
 
-        #WRITE AND CREATE FILE
+        # WRITE AND CREATE FILE
         try:
-            fileWrite = open(fileName,'w+')
+            fileWrite = open(fileName, 'w+')
         except:
             return False
-        
+
         try:
             fileWrite.write(jsonDatas)
         except:
             return False
-        
+
         fileWrite.close()
         return True
 
