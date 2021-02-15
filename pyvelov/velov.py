@@ -87,7 +87,7 @@ class VelovStation:
         """
         if strDateTime is None:
             return None
-        
+
         DateTimeSplit = strDateTime.split(" ")
         date = DateTimeSplit[0]
         time = DateTimeSplit[1]
@@ -98,8 +98,7 @@ class VelovStation:
         dateSplited = [int(element) for element in dateSplited]
         timeSplited = [int(element) for element in timeSplited]
 
-        return datetime(dateSplited[0],dateSplited[1],dateSplited[2],timeSplited[0],timeSplited[1],timeSplited[2])
-
+        return datetime(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1], timeSplited[2])
 
     def availabilityStandsPercentageCalculator(self) -> float:
         """Calculate percentage of Stands available
@@ -137,5 +136,6 @@ class VelovStation:
             return None
 
     ## PUBLIC METHODS ##
+
 
 pass
