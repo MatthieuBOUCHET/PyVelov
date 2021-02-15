@@ -1,4 +1,5 @@
 import api
+from os import remove
 from json import dumps
 from datetime import datetime
 
@@ -23,7 +24,7 @@ class VelovStation:
         Returns:
             None
         """
-        self.id = dictData['number']
+        self.uid = dictData['number']
         self.gid = dictData['gid']
 
         self.name = dictData['name']
@@ -41,6 +42,8 @@ class VelovStation:
         self.banking = dictData['banking']
         self.updateDateTime = dictData['last_update']
         self.insee = self.stringToInt(dictData['code_insee'])
+
+        self.availabilityStandsPercentage = self.availabilityStandsPercentageCalculator()
 
         return None
 
@@ -125,7 +128,7 @@ class VelovStation:
         if self.updateDateTime is None:
             return None
 
-        DateTimeSplit = self.updateDateTime.split(" ")
+        DateTimeSplit = self.getAttribute("updateDateTime").split(" ")
         date = DateTimeSplit[0]
         time = DateTimeSplit[1]
 
@@ -137,8 +140,43 @@ class VelovStation:
 
         return datetime(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1], timeSplited[2])
 
-    def exportJSON(self):
+    def exportJSON(self) -> str:
+        """Method exports in JSON datas (string) the datas of station
+
+        Returns:
+            string: String of JSON serialized datas.
+        """
         datas = self.getAll()
         return dumps(datas)
+
+    def exportJSONFile(self) -> bool:
+        """Method creates and write a file with JSON datas.
+        The file created is named : VELOVStation_[UID]
+
+        Returns:
+            bool: [description]
+        """
+        uid = self.getAttribute("uid")
+        fileName = "VELOVStation_{0}.json".format(uid)
+
+        #CREATE JSONDATAS
+        try:
+            jsonDatas = self.exportJSON()
+        except:
+            return False
+
+        #WRITE AND CREATE FILE
+        try:
+            fileWrite = open(fileName,'w+')
+        except:
+            return False
+        
+        try:
+            fileWrite.write(jsonDatas)
+        except:
+            return False
+        
+        fileWrite.close()
+        return True
 
 pass
