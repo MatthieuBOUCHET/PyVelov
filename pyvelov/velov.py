@@ -2,6 +2,7 @@ import api
 
 RAW_DATAS = api.createAPIInstance()
 
+
 class VelovStation:
     """
     Class represents a Velov' Station.
@@ -10,7 +11,8 @@ class VelovStation:
     -----------
 
     """
-    def __init__(self,dictData) -> None:
+
+    def __init__(self, dictData) -> None:
         """Constructor
 
         Args:
@@ -23,8 +25,8 @@ class VelovStation:
         self.gid = dictData['gid']
 
         self.name = dictData['name']
-        self.adress = dictData['adress']
-        self.adress2 = dictData['adress2']
+        self.adress = dictData['address']
+        self.adress2 = dictData['address2']
         self.commune = dictData['commune']
         self.pole = dictData['pole']
         self.latitude = dictData['lat']
@@ -33,15 +35,17 @@ class VelovStation:
         self.availableStands = dictData['available_bike_stands']
         self.availableBikes = dictData['available_bikes']
         self.status = self.statusConvert(dictData['status'])
-        self.availability = dictData['availabilityCode']
+        self.availability = dictData['availabilitycode']
         self.banking = dictData['banking']
         self.updateDateTime = dictData['last_update']
         self.insee = self.stringToInt(dictData['code_insee'])
 
+        self.availabilityStandsPercentage = self.availabilityStandsPercentageCalculator()
 
         return None
 
-    def statusConvert(self,status) -> bool:
+    ## PRIVATE METHODS ##
+    def statusConvert(self, status) -> bool:
         """Method convert a string to boolean
 
         Args:
@@ -55,7 +59,7 @@ class VelovStation:
         else:
             return False
 
-    def stringToInt(self,parameter) -> int:
+    def stringToInt(self, parameter) -> int:
         """Method convert string INSEE code to integer.
 
         Args:
@@ -72,5 +76,41 @@ class VelovStation:
                 return parameter
         return parameter
 
+    def availabilityStandsPercentageCalculator(self) -> float:
+        """Calculate percentage of Stands available
+
+        Returns:
+            float or None: Return float(2 digits after comma) or None
+        """
+        if self.availableStands is None or self.totalStands is None:
+            return None
+
+        percentage = (100 * self.availableStands) / self.totalStands
+        return round(percentage, 2)
+
+    ## GETTERS ##
+    def getAll(self) -> dict:
+        """Return all attributes (self.__dict__)
+
+        Returns:
+            dict: Dictionnaries of attributes
+        """
+        return self.__dict__
+
+    def getAttribute(self, attribute):
+        """Return attribute passed in parameter
+
+        Args:
+            attribute (string): Attribute searched
+
+        Returns:
+            Mixed or None: Attribute
+        """
+        try:
+            return self.getAll()[attribute]
+        except KeyError:
+            return None
+
+    ## PUBLIC METHODS ##
 
 pass
