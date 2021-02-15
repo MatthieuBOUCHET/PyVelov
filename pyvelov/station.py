@@ -7,12 +7,12 @@ Author website: https://www.matthieubouchet.fr
 GitHub project: https://github.com/MatthieuBOUCHET/PyVelov
 """
 
-import api
+
 from os import remove
 from json import dumps
 from datetime import datetime
 
-RAW_DATAS = api.createAPIInstance()
+
 
 
 class VelovStation:
@@ -46,17 +46,20 @@ class VelovStation:
         self.totalStands = dictData['bike_stands']
         self.availableStands = dictData['available_bike_stands']
         self.availableBikes = dictData['available_bikes']
-        self.status = self.statusConvert(dictData['status'])
+        self.status = self.__statusConvert(dictData['status'])
         self.availability = dictData['availabilitycode']
         self.banking = dictData['banking']
         self.updateDateTime = dictData['last_update']
-        self.insee = self.stringToInt(dictData['code_insee'])
+        self.insee = self.__stringToInt(dictData['code_insee'])
 
-        self.availabilityStandsPercentage = self.availabilityStandsPercentageCalculator()
+        self.availabilityStandsPercentage = self.__availabilityStandsPercentageCalculator()
 
         return None
 
-    def statusConvert(self, status) -> bool:
+    def __str__(self) -> str:
+        return self.getAttribute('name')
+
+    def __statusConvert(self, status) -> bool:
         """Method convert a string to boolean
 
         Args:
@@ -70,7 +73,7 @@ class VelovStation:
         else:
             return False
 
-    def stringToInt(self, parameter) -> int:
+    def __stringToInt(self, parameter) -> int:
         """Method convert string INSEE code to integer.
 
         Args:
@@ -87,7 +90,7 @@ class VelovStation:
                 return parameter
         return parameter
 
-    def availabilityStandsPercentageCalculator(self) -> float:
+    def __availabilityStandsPercentageCalculator(self) -> float:
         """Calculate percentage of Stands available
 
         Returns:
