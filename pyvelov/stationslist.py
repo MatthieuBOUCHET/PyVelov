@@ -8,13 +8,13 @@ Author website: https://www.matthieubouchet.fr
 GitHub project: https://github.com/MatthieuBOUCHET/PyVelov
 """
 
-from pyvelov import *
+from pyvelov import api, station
 
 from datetime import datetime
 import os
 import sqlite3
 
-RAW_DATAS = createAPIInstance()
+RAW_DATAS = api.createAPIInstance()
 
 
 class VelovStationsList(list):
@@ -57,7 +57,7 @@ class VelovStationsList(list):
         """
         if total:
             for stat in RAW_DATAS:
-                stationCreation = VelovStation(stat)
+                stationCreation = station.VelovStation(stat)
                 self.append(stationCreation)
         else:
             for station in args:
