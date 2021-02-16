@@ -8,8 +8,8 @@ Author website: https://www.matthieubouchet.fr
 GitHub project: https://github.com/MatthieuBOUCHET/PyVelov
 """
 
-from station import *
-from api import *
+from pyvelov import *
+
 from datetime import datetime
 import os
 import sqlite3
