@@ -13,8 +13,6 @@ from json import dumps
 from datetime import datetime
 
 
-
-
 class VelovStation:
     """
     Class represents a Velov' Station.
@@ -102,7 +100,7 @@ class VelovStation:
         percentage = (100 * self.availableStands) / self.totalStands
         return round(percentage, 2)
 
-    def __poleSplit(self,datasPole) -> tuple:
+    def __poleSplit(self, datasPole) -> tuple:
         """Split poles
 
         Args
@@ -171,7 +169,6 @@ class VelovStation:
 
         return datetime(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1], timeSplited[2])
 
-    
     def exportJSON(self) -> str:
         """Method exports in JSON datas (string) the datas of station
 
@@ -217,5 +214,6 @@ class VelovStation:
 
         fileWrite.close()
         return True
+
 
 pass

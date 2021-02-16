@@ -10,6 +10,9 @@ GitHub project: https://github.com/MatthieuBOUCHET/PyVelov
 
 from station import *
 from api import *
+from datetime import datetime
+import os
+import sqlite3
 
 RAW_DATAS = createAPIInstance()
 
@@ -240,6 +243,71 @@ class VelovStationsList(list):
         strExp += ']'
 
         return strExp
-    
-    
+
+    def exportListJSONFile(self, fileName=None) -> bool:
+        """Method creates and write a file with JSON datas of all list.
+        The file created is default named : VELOVStationList_date
+
+        Args
+        ----
+        fileName(string): Optional. Name given to file
+        Returns
+        -------
+            bool: True if success and False if fail.
+        """
+        dateTime = datetime.now()
+        dateTime = dateTime.strftime('%d-%m-%Y-%H-%M-%S')
+        if fileName is None:
+            fileName = "VELOVStationList_{0}.json".format(dateTime)
+        else:
+            fileName = str(fileName)
+
+        # CREATE JSONDATAS
+        try:
+            jsonDatas = self.exportListJSON()
+        except:
+            return False
+
+        # WRITE AND CREATE FILE
+        try:
+            fileWrite = open(fileName, 'w+')
+        except:
+            return False
+
+        try:
+            fileWrite.write(jsonDatas)
+        except:
+            return False
+
+        fileWrite.close()
+        return True
+
+    def exportJSONFilesIndex(self, path=None) -> bool:
+        """Method creates a directory index with all JSON files.
+        Directory is named 'VelovStationsJSONIndex_%d-%m-%Y-%H-%M-%S' and created
+        in CWD.
+
+        Returns:
+            bool: True if success and False if fail.
+        """
+        dateTime = datetime.now().strftime('%d-%m-%Y-%H-%M-%S')
+        dirName = 'VelovStationsJSONIndex_{0}'.format(dateTime)
+        initialCWD = os.getcwd()
+
+        # Create directory
+        try:
+            os.mkdir(dirName)
+        except:
+            return False
+
+        os.chdir('./'+dirName)
+
+        for station in self:
+            if not(station.exportJSONFile()):
+                return False
+
+        os.chdir(initialCWD)
+        return True
+
+
 pass
