@@ -181,15 +181,22 @@ class VelovStation:
         datas = self.getAll()
         return dumps(datas)
 
-    def exportJSONFile(self) -> bool:
+    def exportJSONFile(self, fileName=None) -> bool:
         """Method creates and write a file with JSON datas.
         The file created is named : VELOVStation_[UID]
 
-        Returns:
-            bool: [description]
+        Args
+        ----
+        fileName(string): Optional. Name given to file
+        Returns
+        -------
+            bool: True if success and False if fail.
         """
         uid = self.getAttribute("uid")
-        fileName = "VELOVStation_{0}.json".format(uid)
+        if fileName is None:
+            fileName = "VELOVStation_{0}.json".format(uid)
+        else:
+            fileName = str(fileName)
 
         # CREATE JSONDATAS
         try:
