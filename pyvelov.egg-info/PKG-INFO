@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: pyvelov
-Version: 0.0.1
+Version: 0.0.2
 Summary: Package build to communication with VeloV API
 Home-page: https://github.com/MatthieuBOUCHET/PyVelov
 Author: Matthieu BOUCHET
