@@ -40,7 +40,7 @@ class VelovStation:
         self.adress = dictData['address']
         self.adress2 = dictData['address2']
         self.commune = dictData['commune']
-        self.pole = dictData['pole']
+        self.pole = self.__poleSplit(dictData['pole'])
         self.latitude = dictData['lat']
         self.longitude = dictData['lng']
         self.totalStands = dictData['bike_stands']
@@ -102,6 +102,25 @@ class VelovStation:
         percentage = (100 * self.availableStands) / self.totalStands
         return round(percentage, 2)
 
+    def __poleSplit(self,datasPole) -> tuple:
+        """Split poles
+
+        Args
+        ----
+        datasPole(string):String of datas
+
+        Returns
+        --------
+            tuple: Tuple of poles
+        """
+        if datasPole is None:
+            return None
+
+        polesSplited = datasPole.split(', ')
+
+        polesSplited = tuple(polesSplited)
+        return polesSplited
+
     ## GETTERS ##
     def getAll(self) -> dict:
         """Return all attributes (self.__dict__)
@@ -152,6 +171,7 @@ class VelovStation:
 
         return datetime(dateSplited[0], dateSplited[1], dateSplited[2], timeSplited[0], timeSplited[1], timeSplited[2])
 
+    
     def exportJSON(self) -> str:
         """Method exports in JSON datas (string) the datas of station
 

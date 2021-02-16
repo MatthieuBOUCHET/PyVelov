@@ -8,11 +8,11 @@ Author website: https://www.matthieubouchet.fr
 GitHub project: https://github.com/MatthieuBOUCHET/PyVelov
 """
 
-from typing import Iterable
-from . import api
-from . import station
+from station import *
+from api import *
 
-RAW_DATAS = api.createAPIInstance()
+RAW_DATAS = createAPIInstance()
+
 
 class VelovStationsList(list):
     """Class `VelovStationsList` is a class based on built-in `list` class.
@@ -26,7 +26,8 @@ class VelovStationsList(list):
     -------
         - list (built-in): [description]
     """
-    def __init__(self,total,*args) -> None:
+
+    def __init__(self, total, *args) -> None:
         """Constructor with a variable number of arguments.
         Each *args argument must be a `VelovStation` class instanciation.
 
@@ -44,7 +45,7 @@ class VelovStationsList(list):
             station3 = VelovStation(dataStation3)
 
             stationsList = VelovStationsList(False,station1, station2, station3)
-            
+
             print(stationsList) => [station1,station2,station3]
 
         Example (Creation of list with all stations from API):
@@ -53,7 +54,8 @@ class VelovStationsList(list):
         """
         if total:
             for stat in RAW_DATAS:
-                stationCreation = station.VelovStation(stat)
+                stationCreation = VelovStation(stat)
+                self.append(stationCreation)
         else:
             for station in args:
                 self.append(station)
@@ -61,16 +63,15 @@ class VelovStationsList(list):
         self.totalAvailableBikes = self.__sumAttribute('availableBikes')
         self.totalAvailableStands = self.__sumAttribute('availableStands')
         self.totalStands = self.__sumAttribute('totalStands')
-        self.percentageAvailableStands = round(self.totalAvailableStands * 100 / self.totalStands,2)
+        self.percentageAvailableStands = round(
+            self.totalAvailableStands * 100 / self.totalStands, 2)
         self.statusStations = self.__sumStationsBoolean('status')
         self.bankingStations = self.__sumStationsBoolean('banking')
-        self.polesSet = self.__browserList('pole')
+        self.polesSet = self.__browserSet('pole')
         self.communesSet = self.__browserList('commune')
 
-
-
     ## OVERLOAD ##
-    
+
     def append(self, station) -> None:
         """Overloading of append function.
         Call parent list class append method.
@@ -79,7 +80,7 @@ class VelovStationsList(list):
         Args
         -----
             station (VelovStation): A `VelovStation` class instanciation.
-        
+
         Raises
         ------
             ValueError if `station`argument is not a `VelovStation` class instanciation.
@@ -88,7 +89,7 @@ class VelovStationsList(list):
             None
         """
 
-        #TYPE VERIFICATION
+        # TYPE VERIFICATION
         typeArg = str(type(station))
         if not('VelovStation' in typeArg):
             raise ValueError('Argument must be a VelovStation object')
@@ -96,7 +97,7 @@ class VelovStationsList(list):
         return super().append(station)
 
     ## STATS ##
-    def __sumAttribute(self,attribute) -> int:
+    def __sumAttribute(self, attribute) -> int:
         """Calculate the sum of attribute from station stacked in `VelovStationList`
 
         Args
@@ -104,17 +105,17 @@ class VelovStationsList(list):
             attribute (string): One attribute from `VelovStation` class.
         """
         total = 0
-        
+
         for station in self:
             temp = station.getAttribute(attribute)
             if temp is None:
                 temp = 0
-            
+
             total += temp
-        
+
         return total
 
-    def __sumStationsBoolean(self,attribute) -> tuple:
+    def __sumStationsBoolean(self, attribute) -> tuple:
         """Calculate number of stations with attribute true or false.
 
         Args
@@ -154,10 +155,10 @@ class VelovStationsList(list):
             else:
                 total2 += 1
 
-        return total1,total2
+        return total1, total2
 
-    def __browserList(self,attribute) -> set:
-        """Metod browses StationsList and Stations attribute selected
+    def __browserList(self, attribute) -> set:
+        """Method browses StationsList and Stations attribute selected
 
         Args
         ----
@@ -169,8 +170,30 @@ class VelovStationsList(list):
         convertibleiterable = []
         for station in self:
             convertibleiterable.append(station.getAttribute(attribute))
-        
+
         return set(convertibleiterable)
+
+    def __browserSet(self, attribute) -> set:
+        """Method browses StationsList and Stations attribute (tuple) selected.
+
+        Args
+        -----
+            attribute (tuple): One attribute from `VelovStation` class.
+
+        Returns:
+            set
+        """
+        convertibleIterable = []
+        for station in self:
+            attr = station.getAttribute(attribute)
+
+            if attr is None:
+                convertibleIterable.append(None)
+            else:
+                for element in attr:
+                    convertibleIterable.append(element)
+
+        return set(convertibleIterable)
 
     ## GETTERS ##
     def getProperties(self) -> dict:
@@ -178,7 +201,7 @@ class VelovStationsList(list):
 
         Returns:
             dict: Dict of statistics
-            
+
             Keys:
             - totalAvailableBikes (int)
             - totalAvailableStands (int)
@@ -191,14 +214,15 @@ class VelovStationsList(list):
         """
 
         return {
-            'totalAvailableBikes':self.totalAvailableBikes,
-            'totalAvailableStands':self.totalAvailableStands,
-            'percentageAvailableStands':self.percentageAvailableStands,
-            'totalStands':self.totalStands,
-            'statusStations':self.statusStations,
-            'bankingStations':self.bankingStations,
-            'polesSet':self.polesSet,
-            'communesSet':self.communesSet
+            'totalAvailableBikes': self.totalAvailableBikes,
+            'totalAvailableStands': self.totalAvailableStands,
+            'percentageAvailableStands': self.percentageAvailableStands,
+            'totalStands': self.totalStands,
+            'statusStations': self.statusStations,
+            'bankingStations': self.bankingStations,
+            'polesSet': self.polesSet,
+            'communesSet': self.communesSet
         }
+
 
 pass
