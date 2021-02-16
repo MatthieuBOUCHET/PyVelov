@@ -224,5 +224,20 @@ class VelovStationsList(list):
             'communesSet': self.communesSet
         }
 
+    ## EXPORTATION ##
+    def exportListJSON(self) -> str:
+        """Method export a JSON string
 
+        Returns:
+            strExp(str)
+        """
+        length = len(self)
+        strExp = '['
+        for station in range(length):
+            strExp += self[station].exportJSON()
+            if station != length - 1:
+                strExp += ','
+        strExp += ']'
+
+        return strExp
 pass
