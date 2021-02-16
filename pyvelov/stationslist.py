@@ -60,8 +60,8 @@ class VelovStationsList(list):
                 stationCreation = station.VelovStation(stat)
                 self.append(stationCreation)
         else:
-            for station in args:
-                self.append(station)
+            for stat in args:
+                self.append(stat)
 
         self.totalAvailableBikes = self.__sumAttribute('availableBikes')
         self.totalAvailableStands = self.__sumAttribute('availableStands')
