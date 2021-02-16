@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: pyvelov
+Version: 0.0.1
+Summary: Package build to communication with VeloV API
+Home-page: https://github.com/MatthieuBOUCHET/PyVelov
+Author: Matthieu BOUCHET
+Author-email: matthieu.bouchet@outlook.com
+License: UNKNOWN
+Description: # PyVelov
+         Python library interacting with Velov API
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.9
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Requires-Python: >=3.0
+Description-Content-Type: text/markdown
