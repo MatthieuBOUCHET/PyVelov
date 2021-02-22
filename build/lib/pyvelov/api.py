@@ -22,8 +22,6 @@ from urllib.request import urlretrieve
 import json
 import os
 
-URL_API = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?maxfeatures=-1&start=1'
-
 
 class APIConnection:
     """
@@ -42,12 +40,13 @@ class APIConnection:
         -------
             `None`
         """
+        self.__URL_API = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json?maxfeatures=-1&start=1'
         self.datas = None
         self.nbStations = 0
 
         # Connection with API
         try:
-            request = urlretrieve(URL_API)
+            request = urlretrieve(self.__URL_API)
         except:
             return None
 

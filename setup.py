@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pyvelov",
-    version="0.0.3",
+    version="0.0.4",
     author="Matthieu BOUCHET",
     author_email="matthieu.bouchet@outlook.com",
     description="Package build to communication with VeloV API",
